@@ -138,7 +138,7 @@
       <strong style="color:#ffe600; display:block; margin-bottom:6px; text-transform:uppercase;">ATURAN KUIS (50 SOAL):</strong>
       <ul>
         <li>🪈 <strong>Nada Panduan:</strong> Do - Re - Mi - Fa - Sol (1 ketuk per nada).</li>
-        <li>⏱️ <strong>Jeda Diam:</strong> Jeda 3 detik setelah nada panduan.</li>
+        <li>⏱️ <strong>Jeda Diam singkat:</strong> Jeda 1 detik setelah nada panduan.</li>
         <li>🎯 <strong>Tebak Nada:</strong> Tebak 1 nada akhir (Do, Re, Mi, Fa, atau Sol).</li>
         <li>💯 <strong>Sistem Skor:</strong> Tiap soal = 2 Poin (Total Maksimal = 100 Poin).</li>
         <li>🔀 <strong>Posisi Acak:</strong> Letak ubin dan opsi jawaban diacak penuh!</li>
@@ -173,7 +173,7 @@
       <div class="question-box" id="question-box">
         <span id="question-text">Memuat soal...</span>
         <button id="audio-play-btn" class="audio-btn" onclick="playQuestionSound()">
-          🪈 Putar Ulang Flute (Do-Re-Mi-Fa-Sol ... 3 Detik ... Tebakan)
+          🪈 Putar Ulang Flute (Do-Re-Mi-Fa-Sol ... 1 Detik ... Tebakan)
         </button>
       </div>
 
@@ -196,7 +196,6 @@
     let audioCtx = null;
     let currentVoiceAudio = null;
 
-    // FREKUENSI NADA C5 DENGAN FA (F5) DAN SOL (G5)
     const FREQ = {
       C5: 523.25, // Do
       D5: 587.33, // Re
@@ -229,12 +228,11 @@
       { name: "NANA", icon: "🐱", quote: "BISA YUK!" }
     ];
 
-    // GENERATE 50 SOAL EAR TRAINING TERACAK
     var rawQuestions = [];
     for (let i = 0; i < 50; i++) {
       let targetObj = NOTE_OPTIONS[Math.floor(Math.random() * NOTE_OPTIONS.length)];
       rawQuestions.push({
-        q: "Dengarkan nada panduan Do - Re - Mi - Fa - Sol (1 ketuk), lalu diam 3 detik. Nada apakah yang berbunyi di akhir?",
+        q: "Dengarkan nada panduan Do - Re - Mi - Fa - Sol (1 ketuk), lalu diam 1 detik. Nada apakah yang berbunyi di akhir?",
         options: NOTE_OPTIONS.map(n => n.name),
         correctText: targetObj.name,
         targetFreq: targetObj.freq
@@ -304,7 +302,7 @@
       osc.stop(startTime + dur);
     }
 
-    /* POLA PANDUAN: DO - RE - MI - FA - SOL (1 KETUK) -> JEDA 3 DETIK -> NADA TEBAKAN */
+    /* POLA PANDUAN: DO - RE - MI - FA - SOL (1 KETUK) -> JEDA 1 DETIK (1 KETUK) -> NADA TEBAKAN */
     function playEarTrainingPattern(targetFreq) {
       initAudioContext();
       if (!audioCtx) return;
@@ -318,8 +316,8 @@
       playFluteTone(beat1, now + 3.3, FREQ.F5); // Fa
       playFluteTone(beat1, now + 4.4, FREQ.G5); // Sol
 
-      // Jeda 3 detik -> Bunyikan Tebakan di detik ke-8.5
-      playFluteTone(beat1, now + 8.5, targetFreq);
+      // Jeda 1 detik -> Bunyikan Tebakan di detik ke-6.5
+      playFluteTone(beat1, now + 6.5, targetFreq);
     }
 
     function showHeroBoost(isCorrect) {
@@ -559,8 +557,14 @@
       var allBtns = document.querySelectorAll(".opt-btn");
       allBtns.forEach(function(btn) {
         btn.disabled = true;
-        if (btn.innerText === correctText) btn.classList.add("correct");
-        else if (btn === selectedBtn && !isCorrect) btn.classList.add("wrong");
+        // JIKA BENAR -> TAMPILKAN HIJAU DI OPSINYA
+        if (isCorrect && btn.innerText === correctText) {
+          btn.classList.add("correct");
+        }
+        // JIKA SALAH -> TAMPILKAN MERAH HANYA PADA PILIHAN MURID (KUNCI HIJAU TIDAK DITAMPILKAN)
+        else if (!isCorrect && btn === selectedBtn) {
+          btn.classList.add("wrong");
+        }
       });
 
       var tile = document.getElementById("tile-" + currentQIndex);
@@ -583,11 +587,9 @@
       answeredCount++;
 
       playSFX('wrong');
-      var qData = selectedQuestions[currentQIndex];
       var allBtns = document.querySelectorAll(".opt-btn");
       allBtns.forEach(function(btn) {
         btn.disabled = true;
-        if (btn.innerText === qData.correctText) btn.classList.add("correct");
       });
 
       var tile = document.getElementById("tile-" + currentQIndex);
@@ -599,7 +601,7 @@
     }
 
     function updateOverallProgress() {
-      var calculatedScore = correctAnswersCount * 2; // 50 soal x 2 poin = 100
+      var calculatedScore = correctAnswersCount * 2;
       document.getElementById("q-counter").innerText = `Terjawab: ${answeredCount} / 50 Soal`;
       document.getElementById("score-badge").innerText = "SKOR: " + calculatedScore;
     }
