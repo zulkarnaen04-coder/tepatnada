@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>KUIS MUSIK KELAS 7 - MLBB EAR TRAINING 50 SOAL</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; }
+    body { background: #0f0c1b; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; overflow-x: hidden; }
+    
+    .cheat-warning { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 57, 70, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    .cheat-warning h1 { font-size: 28px; color: #fff; margin-bottom: 15px; text-transform: uppercase; }
+    .cheat-warning p { font-size: 16px; color: #f8f9fa; margin-bottom: 20px; line-height: 1.5; }
+    .cheat-warning button { background: #fff; color: #e63946; font-size: 18px; font-weight: bold; padding: 12px 30px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+    .header { background: #1a162b; border-radius: 16px; padding: 12px 15px; border: 3px solid #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); margin-bottom: 15px; }
+    .top-info { display: flex; justify-content: space-between; align-items: center; }
+    .student-info { font-size: 16px; color: #00f0ff; margin-bottom: 6px; font-weight: bold; text-shadow: 0 0 5px #00f0ff; }
+    .q-counter { font-size: 16px; font-weight: bold; color: #ffe600; }
+    .score-badge { background: linear-gradient(135deg, #00f0ff, #ff007f); padding: 8px 18px; border-radius: 20px; font-size: 18px; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px #000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+    .tiles-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; padding: 15px; background: #151221; border: 3px solid #7928ca; border-radius: 20px; flex-grow: 1; max-height: calc(100vh - 180px); overflow-y: auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+    
+    .tile-btn { 
+      background: linear-gradient(180deg, #2d264a, #1a162b); 
+      border: 2px solid #00f0ff; 
+      border-bottom: 5px solid #00a8b3; 
+      border-radius: 10px; 
+      color: #fff; 
+      font-size: 16px; 
+      font-weight: 900; 
+      height: 55px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      cursor: pointer; 
+      transition: all 0.1s ease; 
+      box-shadow: 0 4px 0 #008088, 0 6px 8px rgba(0,0,0,0.5); 
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .tile-btn:active { transform: translateY(3px); border-bottom-width: 2px; box-shadow: 0 2px 0 #008088; }
+    .tile-btn.correct { background: linear-gradient(180deg, #10b981, #059669) !important; border-color: #34d399 !important; border-bottom: 5px solid #047857 !important; cursor: not-allowed; }
+    .tile-btn.wrong { background: linear-gradient(180deg, #ef4444, #dc2626) !important; border-color: #f87171 !important; border-bottom: 5px solid #b91c1c !important; cursor: not-allowed; }
+
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
+    .modal-card { background: #1a162b; border: 3px solid #00f0ff; border-radius: 20px; padding: 20px; width: 100%; max-width: 500px; box-shadow: 0 0 25px rgba(0, 240, 255, 0.3); display: flex; flex-direction: column; position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .modal-title { font-size: 18px; font-weight: 900; color: #00f0ff; text-transform: uppercase; letter-spacing: 1px; }
+    .close-modal-btn { background: #ef4444; color: #fff; border: none; font-weight: bold; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 3px 0 #991b1b; }
+
+    .timer-container { width: 100%; background: #0f0c1b; border-radius: 10px; height: 18px; border: 2px solid #7928ca; overflow: hidden; position: relative; margin-bottom: 15px; }
+    .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #00f0ff, #ff007f); transition: width 1s linear; }
+    .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px #000; }
+
+    .question-box { background: #0f0c1b; border: 2px solid #ffe600; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; line-height: 1.4; text-align: center; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffe600; margin-bottom: 15px; box-shadow: inset 0 0 10px rgba(255, 230, 0, 0.2); }
+    .audio-btn { background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: 2px solid #fff; border-bottom: 4px solid #4a1580; padding: 10px 20px; font-size: 15px; font-weight: bold; border-radius: 20px; cursor: pointer; margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    .audio-btn:active { transform: translateY(2px); }
+
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .opt-btn { 
+      background: linear-gradient(180deg, #2d264a, #1a162b); 
+      border: 2px solid #7928ca; 
+      border-bottom: 5px solid #4a1580; 
+      color: #fff; 
+      padding: 12px 10px; 
+      border-radius: 12px; 
+      font-size: 15px; 
+      font-weight: bold; 
+      text-align: center; 
+      cursor: pointer; 
+      transition: all 0.1s ease; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+    }
+    .opt-btn:active { transform: translateY(3px); border-bottom-width: 2px; }
+    .opt-btn.correct { background: linear-gradient(180deg, #10b981, #059669) !important; border-color: #34d399 !important; border-bottom: 5px solid #047857 !important; color: #fff !important; }
+    .opt-btn.wrong { background: linear-gradient(180deg, #ef4444, #dc2626) !important; border-color: #f87171 !important; border-bottom: 5px solid #b91c1c !important; color: #fff !important; }
+
+    .hero-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 9990; justify-content: center; align-items: center; padding: 20px; }
+    .hero-card { background: #1a162b; border-radius: 20px; padding: 20px 15px; width: 100%; max-width: 290px; text-align: center; position: relative; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); animation: heroPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes heroPop { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .hero-card.correct-style { border: 4px solid #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); }
+    .hero-card.wrong-style { border: 4px solid #ef4444; box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); }
+    .hero-avatar { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center; font-size: 40px; background: #0f0c1b; box-shadow: 0 0 15px rgba(255,255,255,0.2); }
+    .correct-style .hero-avatar { border: 3px solid #10b981; box-shadow: 0 0 15px #10b981; }
+    .wrong-style .hero-avatar { border: 3px solid #ef4444; box-shadow: 0 0 15px #ef4444; }
+    .hero-title { font-size: 18px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+    .correct-style .hero-title { color: #34d399; text-shadow: 0 0 8px #10b981; }
+    .wrong-style .hero-title { color: #f87171; text-shadow: 0 0 8px #ef4444; }
+    .hero-quote { font-size: 22px; color: #ffe600; font-weight: 900; line-height: 1.2; margin-bottom: 15px; padding: 8px; background: rgba(0,0,0,0.4); border-radius: 10px; text-transform: uppercase; letter-spacing: 1px; }
+    .hero-next-btn { background: linear-gradient(135deg, #00f0ff, #7928ca); color: #fff; border: 2px solid #fff; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 900; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+    .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #2d264a 0%, #0f0c1b 100%); z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; overflow-y: auto; }
+    .start-title { color: #00f0ff; font-size: 28px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff; }
+    .start-subtitle { color: #ff007f; font-size: 16px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px #ff007f; }
+    .student-form { background: #1a162b; border: 3px solid #ff007f; padding: 20px; border-radius: 16px; width: 100%; max-width: 360px; margin-bottom: 20px; text-align: left; box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 13px; color: #ffe600; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; }
+    .form-group input { width: 100%; padding: 12px; font-size: 15px; border-radius: 10px; border: 2px solid #7928ca; background: #0f0c1b; color: #fff; outline: none; user-select: text; -webkit-user-select: text; }
+    .form-group input:focus { border-color: #00f0ff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+
+    .rule-box { background: #1a162b; border: 2px solid #7928ca; padding: 15px; border-radius: 12px; text-align: left; font-size: 12px; margin-bottom: 20px; width: 100%; max-width: 360px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+    .rule-box li { margin-bottom: 6px; color: #e2e8f0; }
+    
+    .start-btn { background: linear-gradient(135deg, #00f0ff, #7928ca); color: #fff; font-size: 22px; font-weight: 900; padding: 16px 40px; border: 2px solid #fff; border-bottom: 6px solid #008088; border-radius: 40px; cursor: pointer; box-shadow: 0 0 20px rgba(0, 240, 255, 0.6); width: 100%; max-width: 360px; text-transform: uppercase; letter-spacing: 2px; transition: all 0.1s ease; }
+    .start-btn:active { transform: translateY(4px); box-shadow: 0 0 10px rgba(0, 240, 255, 0.6); }
+  </style>
+</head>
+<body>
+
+  <div class="cheat-warning" id="cheat-screen">
+    <h1 id="cheat-title">PERINGATAN CURANG!</h1>
+    <p id="cheat-msg">Terdeteksi meninggalkan aplikasi / membuka tab lain!</p>
+    <button id="resume-cheat-btn" onclick="resumeQuiz()">LANJUTKAN KUIS</button>
+  </div>
+
+  <div class="start-screen" id="start-screen">
+    <div class="start-title">ZULKARNAEN</div>
+    <div class="start-subtitle">🎵 KUIS EAR TRAINING FLUTE 50 SOAL 🎵</div>
+    
+    <div class="student-form">
+      <div class="form-group">
+        <label for="student-name">Nama Lengkap Murid:</label>
+        <input type="text" id="student-name" placeholder="Masukkan nama lengkap..." autocomplete="off">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label for="student-class">Kelas:</label>
+        <input type="text" id="student-class" placeholder="Contoh: 7 Unggul / 7.1" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="rule-box">
+      <strong style="color:#ffe600; display:block; margin-bottom:6px; text-transform:uppercase;">ATURAN KUIS (50 SOAL):</strong>
+      <ul>
+        <li>🪈 <strong>Nada Panduan:</strong> Do - Re - Mi - Fa - Sol (1 ketuk per nada).</li>
+        <li>⏱️ <strong>Jeda Diam:</strong> Jeda 3 detik setelah nada panduan.</li>
+        <li>🎯 <strong>Tebak Nada:</strong> Tebak 1 nada akhir (Do, Re, Mi, Fa, atau Sol).</li>
+        <li>💯 <strong>Sistem Skor:</strong> Tiap soal = 2 Poin (Total Maksimal = 100 Poin).</li>
+        <li>🔀 <strong>Posisi Acak:</strong> Letak ubin dan opsi jawaban diacak penuh!</li>
+        <li>⚡ <strong>Kirim Otomatis:</strong> Nilai terkirim otomatis saat selesai/3x curang/keluar!</li>
+      </ul>
+    </div>
+    <button class="start-btn" onclick="validateAndStart()">START GAME 🚀</button>
+  </div>
+
+  <div class="header">
+    <div class="student-info" id="display-student-info">Siswa: - | Kelas: -</div>
+    <div class="top-info">
+      <div class="q-counter" id="q-counter">Terjawab: 0 / 50 Soal</div>
+      <div class="score-badge" id="score-badge">SKOR: 0</div>
+    </div>
+  </div>
+
+  <div class="tiles-container" id="tiles-container"></div>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Ear Training Flute</div>
+        <button class="close-modal-btn" onclick="closeModalDirectly()">✕ Batal</button>
+      </div>
+
+      <div class="timer-container">
+        <div class="timer-bar" id="timer-bar"></div>
+        <div class="timer-text" id="timer-text">02:00</div>
+      </div>
+
+      <div class="question-box" id="question-box">
+        <span id="question-text">Memuat soal...</span>
+        <button id="audio-play-btn" class="audio-btn" onclick="playQuestionSound()">
+          🪈 Putar Ulang Flute (Do-Re-Mi-Fa-Sol ... 3 Detik ... Tebakan)
+        </button>
+      </div>
+
+      <div class="options-grid" id="options-grid"></div>
+    </div>
+  </div>
+
+  <div class="hero-modal-overlay" id="hero-modal">
+    <div class="hero-card" id="hero-card">
+      <div class="hero-avatar" id="hero-icon">⚔️</div>
+      <div class="hero-title" id="hero-name">HERO NAME</div>
+      <div class="hero-quote" id="hero-quote">"GAS!"</div>
+      <button class="hero-next-btn" onclick="closeHeroModal()">LANJUTKAN 🚀</button>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
+
+    let audioCtx = null;
+    let currentVoiceAudio = null;
+
+    // FREKUENSI NADA C5 DENGAN FA (F5) DAN SOL (G5)
+    const FREQ = {
+      C5: 523.25, // Do
+      D5: 587.33, // Re
+      E5: 659.25, // Mi
+      F5: 698.46, // Fa
+      G5: 783.99  // Sol
+    };
+
+    const NOTE_OPTIONS = [
+      { name: "Nada Do (C)", freq: FREQ.C5 },
+      { name: "Nada Re (D)", freq: FREQ.D5 },
+      { name: "Nada Mi (E)", freq: FREQ.E5 },
+      { name: "Nada Fa (F)", freq: FREQ.F5 },
+      { name: "Nada Sol (G)", freq: FREQ.G5 }
+    ];
+
+    const correctHeroes = [
+      { name: "ALUCARD", icon: "⚔️", quote: "MANTAP!" },
+      { name: "MIYA", icon: "🏹", quote: "FOKUS!" },
+      { name: "GUSION", icon: "🗡", quote: "KEREN!" },
+      { name: "CHOU", icon: "🥊", quote: "GAS!" },
+      { name: "LANCELOT", icon: "🤺", quote: "CAKEP!" }
+    ];
+
+    const wrongHeroes = [
+      { name: "TIGREAL", icon: "🛡️", quote: "BANGKIT!" },
+      { name: "LAYLA", icon: "🔫", quote: "SEMANGAT!" },
+      { name: "ZILONG", icon: "🔱", quote: "LANJUT!" },
+      { name: "BALMOND", icon: "🪓", quote: "AYO!" },
+      { name: "NANA", icon: "🐱", quote: "BISA YUK!" }
+    ];
+
+    // GENERATE 50 SOAL EAR TRAINING TERACAK
+    var rawQuestions = [];
+    for (let i = 0; i < 50; i++) {
+      let targetObj = NOTE_OPTIONS[Math.floor(Math.random() * NOTE_OPTIONS.length)];
+      rawQuestions.push({
+        q: "Dengarkan nada panduan Do - Re - Mi - Fa - Sol (1 ketuk), lalu diam 3 detik. Nada apakah yang berbunyi di akhir?",
+        options: NOTE_OPTIONS.map(n => n.name),
+        correctText: targetObj.name,
+        targetFreq: targetObj.freq
+      });
+    }
+
+    var selectedQuestions = [];
+    var studentName = "";
+    var studentClass = "";
+    var currentQIndex = -1;
+    var correctAnswersCount = 0;
+    var answeredCount = 0;
+    var timerInterval = null;
+    var QUESTION_TIME = 120;
+    var timeLeft = QUESTION_TIME;
+    var cheatCount = 0;
+    var MAX_CHEATS = 3;
+    var isAnswered = false;
+    var userAnswers = new Array(50).fill(null);
+    var isDataSent = false;
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playNaturalVoice(text, onEndCallback) {
+      if (currentVoiceAudio) { currentVoiceAudio.pause(); currentVoiceAudio = null; }
+      try {
+        const soundUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=id&client=tw-ob`;
+        currentVoiceAudio = new Audio(soundUrl);
+        if (onEndCallback) currentVoiceAudio.onended = onEndCallback;
+        let playPromise = currentVoiceAudio.play();
+        if (playPromise !== undefined) { playPromise.catch(function() { if (onEndCallback) onEndCallback(); }); }
+      } catch (e) { if (onEndCallback) onEndCallback(); }
+    }
+
+    function playFluteTone(dur, startTime, freq) {
+      if (!audioCtx) return;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      const vibrato = audioCtx.createOscillator();
+      const vibratoGain = audioCtx.createGain();
+      vibrato.frequency.setValueAtTime(5, startTime);
+      vibratoGain.gain.setValueAtTime(2.5, startTime);
+      vibrato.connect(osc.frequency);
+      vibrato.start(startTime);
+      vibrato.stop(startTime + dur);
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.001, startTime);
+      gain.gain.linearRampToValueAtTime(0.25, startTime + 0.1); 
+      gain.gain.setValueAtTime(0.25, startTime + dur - 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + dur);
+    }
+
+    /* POLA PANDUAN: DO - RE - MI - FA - SOL (1 KETUK) -> JEDA 3 DETIK -> NADA TEBAKAN */
+    function playEarTrainingPattern(targetFreq) {
+      initAudioContext();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime + 0.1;
+      const beat1 = 0.95;
+
+      // Panduan 5 Nada
+      playFluteTone(beat1, now, FREQ.C5);       // Do
+      playFluteTone(beat1, now + 1.1, FREQ.D5); // Re
+      playFluteTone(beat1, now + 2.2, FREQ.E5); // Mi
+      playFluteTone(beat1, now + 3.3, FREQ.F5); // Fa
+      playFluteTone(beat1, now + 4.4, FREQ.G5); // Sol
+
+      // Jeda 3 detik -> Bunyikan Tebakan di detik ke-8.5
+      playFluteTone(beat1, now + 8.5, targetFreq);
+    }
+
+    function showHeroBoost(isCorrect) {
+      const heroModal = document.getElementById("hero-modal");
+      const heroCard = document.getElementById("hero-card");
+      const heroIcon = document.getElementById("hero-icon");
+      const heroName = document.getElementById("hero-name");
+      const heroQuote = document.getElementById("hero-quote");
+
+      let hero = isCorrect ? correctHeroes[Math.floor(Math.random() * correctHeroes.length)] : wrongHeroes[Math.floor(Math.random() * wrongHeroes.length)];
+      heroCard.className = isCorrect ? "hero-card correct-style" : "hero-card wrong-style";
+
+      heroIcon.innerText = hero.icon;
+      heroName.innerText = hero.name;
+      heroQuote.innerText = `"${hero.quote}"`;
+      heroModal.style.display = "flex";
+
+      setTimeout(function() { playNaturalVoice(hero.quote); }, 150);
+    }
+
+    function closeHeroModal() {
+      if (currentVoiceAudio) { currentVoiceAudio.pause(); currentVoiceAudio = null; }
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.getElementById("hero-modal").style.display = "none";
+      document.getElementById("modal-overlay").style.display = "none";
+      currentQIndex = -1;
+
+      if (answeredCount >= 50) {
+        finishQuiz();
+      }
+    }
+
+    function playSFX(type) {
+      initAudioContext();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      if (type === 'correct') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, now);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      }
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.2);
+    }
+
+    function shuffleArray(array) {
+      var arr = array.slice();
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+      return arr;
+    }
+
+    function validateAndStart() {
+      var nameInput = document.getElementById("student-name").value.trim();
+      var classInput = document.getElementById("student-class").value.trim();
+      if (nameInput === "" || classInput === "") {
+        alert("Harap isi Nama Lengkap dan Kelas terlebih dahulu!");
+        return;
+      }
+      studentName = nameInput;
+      studentClass = classInput;
+      document.getElementById("display-student-info").innerText = "Siswa: " + studentName + " | Kelas: " + studentClass;
+      initAudioContext();
+      
+      selectedQuestions = shuffleArray(rawQuestions);
+
+      startQuiz();
+      playNaturalVoice("Selamat datang di Zulkarnaen Kuis Ear Training 50 Soal! Dengarkan nada baik-baik!");
+    }
+
+    document.addEventListener("visibilitychange", function() {
+      if (document.hidden && document.getElementById("start-screen").style.display === "none") {
+        handleCheatViolation("Terdeteksi meninggalkan aplikasi / membuka tab lain!");
+      }
+    });
+
+    window.addEventListener("blur", function() {
+      if (document.getElementById("start-screen").style.display === "none") {
+        handleCheatViolation("Terdeteksi keluar dari jendela kuis!");
+      }
+    });
+
+    window.addEventListener("pagehide", function() {
+      if (studentName !== "" && !isDataSent) { sendDataToGoogleSheets(true); }
+    });
+
+    window.addEventListener("beforeunload", function() {
+      if (studentName !== "" && !isDataSent) { sendDataToGoogleSheets(true); }
+    });
+
+    document.addEventListener("contextmenu", function(e) { e.preventDefault(); });
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) || (e.ctrlKey && e.key === "u")) {
+        e.preventDefault();
+        handleCheatViolation("Terdeteksi mencoba membuka DevTools!");
+      }
+    });
+
+    function handleCheatViolation(reason) {
+      if (isDataSent) return;
+      cheatCount++;
+      clearInterval(timerInterval);
+      var cheatScreen = document.getElementById("cheat-screen");
+      var cheatTitle = document.getElementById("cheat-title");
+      var cheatMsg = document.getElementById("cheat-msg");
+
+      if (cheatCount >= MAX_CHEATS) {
+        cheatTitle.innerText = "DISKUALIFIKASI!";
+        cheatMsg.innerText = "Anda telah melanggar aturan anti-curang sebanyak 3 kali.\nKuis dihentikan dan data pelanggaran tercatat otomatis!";
+        document.getElementById("resume-cheat-btn").style.display = "none";
+        cheatScreen.style.display = "flex";
+        sendDataToGoogleSheets();
+      } else {
+        cheatTitle.innerText = `PERINGATAN CURANG (${cheatCount}/${MAX_CHEATS})`;
+        cheatMsg.innerText = reason + "\n\nJangan tinggalkan kuis atau membuka tab lain!";
+        cheatScreen.style.display = "flex";
+      }
+    }
+
+    function resumeQuiz() {
+      document.getElementById("cheat-screen").style.display = "none";
+      if (currentQIndex !== -1 && !isAnswered) startTimer();
+    }
+
+    function startQuiz() {
+      document.getElementById("start-screen").style.display = "none";
+      renderGridTiles();
+    }
+
+    function renderGridTiles() {
+      var gridContainer = document.getElementById("tiles-container");
+      gridContainer.innerHTML = "";
+      
+      for (var i = 0; i < selectedQuestions.length; i++) {
+        var btn = document.createElement("button");
+        btn.className = "tile-btn";
+        btn.id = "tile-" + i;
+        btn.innerText = (i + 1);
+        btn.onclick = (function(idx) {
+          return function() { openQuestionModal(idx); };
+        })(i);
+        gridContainer.appendChild(btn);
+      }
+    }
+
+    function openQuestionModal(index) {
+      if (userAnswers[index] !== null) return;
+      currentQIndex = index;
+      isAnswered = false;
+      timeLeft = QUESTION_TIME;
+
+      var qData = selectedQuestions[currentQIndex];
+      document.getElementById("question-text").innerText = qData.q;
+      playQuestionSound();
+
+      var shuffledOptions = shuffleArray(qData.options);
+      var grid = document.getElementById("options-grid");
+      grid.innerHTML = "";
+
+      shuffledOptions.forEach(function(optText) {
+        var btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.innerText = optText;
+        btn.onclick = function() { selectAnswer(btn, optText, qData.correctText); };
+        grid.appendChild(btn);
+      });
+
+      document.getElementById("modal-overlay").style.display = "flex";
+      startTimer();
+    }
+
+    function playQuestionSound() {
+      if (currentQIndex !== -1) {
+        playEarTrainingPattern(selectedQuestions[currentQIndex].targetFreq);
+      }
+    }
+
+    function closeModalDirectly() {
+      clearInterval(timerInterval);
+      document.getElementById("modal-overlay").style.display = "none";
+      currentQIndex = -1;
+    }
+
+    function startTimer() {
+      updateTimerUI();
+      timerInterval = setInterval(function() {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timeOutAnswer();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      var minutes = Math.floor(timeLeft / 60);
+      var seconds = timeLeft % 60;
+      var timeStr = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      document.getElementById("timer-text").innerText = timeStr;
+      
+      var percentage = (timeLeft / QUESTION_TIME) * 100;
+      var bar = document.getElementById("timer-bar");
+      bar.style.width = percentage + "%";
+
+      if (timeLeft <= 20) { bar.style.background = "#ef4444"; }
+      else if (timeLeft <= 60) { bar.style.background = "#ffe600"; }
+      else { bar.style.background = "linear-gradient(90deg, #00f0ff, #ff007f)"; }
+    }
+
+    function selectAnswer(selectedBtn, selectedText, correctText) {
+      if (isAnswered) return;
+      isAnswered = true;
+      clearInterval(timerInterval);
+
+      var isCorrect = (selectedText === correctText);
+      userAnswers[currentQIndex] = isCorrect;
+      answeredCount++;
+
+      if (isCorrect) playSFX('correct'); else playSFX('wrong');
+
+      var allBtns = document.querySelectorAll(".opt-btn");
+      allBtns.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.innerText === correctText) btn.classList.add("correct");
+        else if (btn === selectedBtn && !isCorrect) btn.classList.add("wrong");
+      });
+
+      var tile = document.getElementById("tile-" + currentQIndex);
+      if (isCorrect) {
+        correctAnswersCount++;
+        tile.classList.add("correct");
+      } else {
+        tile.classList.add("wrong");
+      }
+      tile.disabled = true;
+
+      updateOverallProgress();
+      setTimeout(function() { showHeroBoost(isCorrect); }, 300);
+    }
+
+    function timeOutAnswer() {
+      if (isAnswered) return;
+      isAnswered = true;
+      userAnswers[currentQIndex] = false;
+      answeredCount++;
+
+      playSFX('wrong');
+      var qData = selectedQuestions[currentQIndex];
+      var allBtns = document.querySelectorAll(".opt-btn");
+      allBtns.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.innerText === qData.correctText) btn.classList.add("correct");
+      });
+
+      var tile = document.getElementById("tile-" + currentQIndex);
+      tile.classList.add("wrong");
+      tile.disabled = true;
+
+      updateOverallProgress();
+      setTimeout(function() { showHeroBoost(false); }, 300);
+    }
+
+    function updateOverallProgress() {
+      var calculatedScore = correctAnswersCount * 2; // 50 soal x 2 poin = 100
+      document.getElementById("q-counter").innerText = `Terjawab: ${answeredCount} / 50 Soal`;
+      document.getElementById("score-badge").innerText = "SKOR: " + calculatedScore;
+    }
+
+    function sendDataToGoogleSheets(useBeacon = false) {
+      if (isDataSent || studentName === "") return;
+      isDataSent = true;
+
+      var finalScore = correctAnswersCount * 2;
+      var formData = new URLSearchParams();
+      formData.append("timestamp", new Date().toLocaleString("id-ID"));
+      formData.append("nama", studentName);
+      formData.append("kelas", studentClass);
+      formData.append("benar", correctAnswersCount);
+      formData.append("totalSoal", 50);
+      formData.append("skor", finalScore);
+      formData.append("pelanggaran", cheatCount);
+
+      if (SCRIPT_URL && SCRIPT_URL.indexOf("AKfycb") !== -1) {
+        if (useBeacon && navigator.sendBeacon) {
+          navigator.sendBeacon(SCRIPT_URL, formData);
+        } else {
+          fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: formData.toString()
+          }).catch(function(err) { console.error("Gagal mengirim data:", err); });
+        }
+      }
+    }
+
+    function finishQuiz() {
+      clearInterval(timerInterval);
+      var finalScore = correctAnswersCount * 2;
+      sendDataToGoogleSheets();
+
+      if (finalScore >= 80) {
+        playNaturalVoice("Selamat! Kepekaan ear training kamu sangat luar biasa!");
+      } else {
+        playNaturalVoice("Tetap semangat! Terus latih pendengaran nada kamu ya!");
+      }
+
+      document.body.innerHTML = `
+        <div style="min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#0f0c1b; color:#fff; text-align:center; padding:20px;">
+          <h1 style="color:#ffe600; font-size:30px; margin-bottom:15px; text-transform:uppercase; text-shadow:0 0 10px #ffe600;">GAME OVER! 🏆</h1>
+          <p style="color:#00f0ff; font-size:15px; margin-bottom:20px;">Data nilai kuis telah berhasil terkirim otomatis ke Google Sheets.</p>
+          <div style="background:#1a162b; border:3px solid #ff007f; padding:20px; border-radius:20px; width:100%; max-width:350px; margin-bottom:20px; text-align:left; box-shadow:0 0 20px rgba(255,0,127,0.3);">
+            <p style="font-size:15px; margin-bottom:8px; color:#00f0ff;">Nama: <strong>${studentName}</strong></p>
+            <p style="font-size:15px; margin-bottom:15px; color:#00f0ff;">Kelas: <strong>${studentClass}</strong></p>
+            <hr style="border:0; border-top:1px solid #7928ca; margin-bottom:15px;">
+            <p style="font-size:16px; margin-bottom:10px;">Soal Terjawab: <strong>${answeredCount} / 50 Soal</strong></p>
+            <p style="font-size:16px; margin-bottom:10px;">Jawaban Benar: <strong style="color:#10b981;">${correctAnswersCount} Soal</strong></p>
+            <p style="font-size:16px; margin-bottom:10px;">Pelanggaran Curang: <strong style="color:${cheatCount > 0 ? '#ef4444' : '#10b981'};">${cheatCount} Kali</strong></p>
+            <p style="font-size:26px; font-weight:900; color:#ffe600; margin-top:10px; text-shadow:0 0 10px #ffe600;">NILAI AKHIR: ${finalScore}</p>
+          </div>
+          <button onclick="location.reload()" style="background:linear-gradient(135deg, #00f0ff, #7928ca); color:#fff; font-size:18px; font-weight:bold; padding:14px 35px; border:2px solid #fff; border-radius:30px; cursor:pointer; box-shadow:0 0 15px rgba(0,240,255,0.5);">MAIN LAGI 🔄</button>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
